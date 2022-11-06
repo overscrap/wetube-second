@@ -1,7 +1,8 @@
 doctype html
 html(lang="ko")
     head
-        title #{pageTitle} | wetube
+        include partials/header.pug
     body
-        block content
+        main
+            block content
     include partials/footer.pug
