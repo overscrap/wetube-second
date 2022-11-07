@@ -1,10 +1,10 @@
 import express from "express"
-import { stories, storiesEdit, storiesDelete } from "../controllers/storyController";
+import { watch, getEdit, postEdit, getUpload, postUpload } from "../controllers/storyController";
 
 const storyRouter = express.Router();
 
-storyRouter.get("/:id", stories);
-storyRouter.get("/:id/edit", storiesEdit);
-storyRouter.get("/:id/delete", storiesDelete);
+storyRouter.get("/:id(\\d+)", watch);
+storyRouter.route("/:id(\\d+)/edit").get(getEdit).post(postEdit);
+storyRouter.route("/upload").get(getUpload).post(postUpload);
 
 export default storyRouter;

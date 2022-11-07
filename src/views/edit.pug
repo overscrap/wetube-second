@@ -1,4 +1,7 @@
 extends base.pug
 
 block content
-    h1 edit!
+    h4 Chang Title of story 
+    form(method="POST")
+        input(placeholder="Story Title" name="title" value=`${story.title}` required)
+        input(value="Save" type="submit")

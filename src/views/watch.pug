@@ -1,4 +1,5 @@
 extends base.pug
 
 block content
-    h1 watch story #{id}!
+    h4 #{story.views} #{story.views === 1 ? "view" : "views"}
+    a(href=`${story.id}/edit`) Edit Story &rarr;

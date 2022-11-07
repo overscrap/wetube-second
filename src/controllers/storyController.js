@@ -1,11 +1,60 @@
-export const stories = (req, res) => {
+const fakeUser = {
+    username: "overscrap",
+    loggedIn: true
+}
+
+const storyDatas = [
+    {
+        title: "First Story",
+        rating: 2,
+        comments: 2,
+        creatAt: "10 minute ago",
+        views: 1,
+        id: 1
+    },
+    {
+        title: "Second Story",
+        rating: 4,
+        comments: 2,
+        creatAt: "20 minute ago",
+        views: 100,
+        id: 2
+    },
+    {
+        title: "Third Story",
+        rating: 5,
+        comments: 232,
+        creatAt: "30 minute ago",
+        views: 200,
+        id: 3
+    },
+];
+
+export const trending = (req, res) => {
+    return res.render("home", { pageTitle: "Home", fakeUser, storyDatas });
+}
+
+export const watch = (req, res) => {
     const { id } = req.params;
-    res.render("watch", { pageTitle: "Watch", id: id });
+    const story = storyDatas[id - 1];
+    return res.render("watch", { pageTitle: `Watching ${story.title}`, story });
 }
-export const storiesEdit = (req, res) => {
-    // res.send("<h1>storiesEdit</h1>");
-    res.render("edit", { pageTitle: "StoryEdit" });
+export const getEdit = (req, res) => {
+    const { id } = req.params;
+    const story = storyDatas[id - 1];
+    return res.render("edit", { pageTitle: `Editing: ${story.title}`, story });
 }
-export const storiesDelete = (req, res) => {
-    res.send("<h1>storiesDelete</h1>");
+export const postEdit = (req, res) => {
+    const { id } = req.params;
+    const { title } = req.body;
+    console.log(title);
+    return res.redirect(`/stories/${id}`);
+}
+
+export const getUpload = (req, res) => {
+    return res.render("upload", { pageTitle: "Upload Story" });
+}
+
+export const postUpload = (req, res) => {
+    //here we will add a video to the videos array.
 }
