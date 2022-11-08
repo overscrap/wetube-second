@@ -47,7 +47,7 @@ export const getEdit = (req, res) => {
 export const postEdit = (req, res) => {
     const { id } = req.params;
     const { title } = req.body;
-    console.log(title);
+    storyDatas[id - 1].title = title;
     return res.redirect(`/stories/${id}`);
 }
 
@@ -56,5 +56,16 @@ export const getUpload = (req, res) => {
 }
 
 export const postUpload = (req, res) => {
+    const { title } = req.body;
+    const newStory = {
+        title,
+        rating: 0,
+        comments: 0,
+        createAt: "just now",
+        views: 0,
+        id: storyDatas.length + 1
+    }
+    storyDatas.push(newStory);
+    return res.redirect("/");
     //here we will add a video to the videos array.
 }
