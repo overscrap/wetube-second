@@ -1,0 +1,18 @@
+doctype html
+html(lang="ko")
+    head
+        include header.pug
+    body
+        header
+            h1=pageTitle
+            nav 
+                ul 
+                    li
+                        a(href="/stories/upload") Upload Story
+                    li 
+                        a(href="/") Home
+                    li 
+                        a(href="/stories/search") Search
+        main
+            block content
+    include footer.pug

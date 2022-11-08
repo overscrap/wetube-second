@@ -1,0 +1,8 @@
+extends partials/layout
+
+block content
+    h4 #{story.views} #{story.views === 1 ? "view" : "views"}
+    br
+    a(href=`${story.id}/edit`) Edit Story &rarr;
+    br
+    a(href=`${story.id}/delete`) Delete Story &rarr;

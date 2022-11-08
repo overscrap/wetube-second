@@ -34,10 +34,10 @@ export const trending = (req, res) => {
     return res.render("home", { pageTitle: "Home", fakeUser, storyDatas });
 }
 
-export const watch = (req, res) => {
+export const show = (req, res) => {
     const { id } = req.params;
     const story = storyDatas[id - 1];
-    return res.render("watch", { pageTitle: `Watching ${story.title}`, story });
+    return res.render("show", { pageTitle: `${story.title}`, story });
 }
 export const getEdit = (req, res) => {
     const { id } = req.params;
@@ -68,4 +68,16 @@ export const postUpload = (req, res) => {
     storyDatas.push(newStory);
     return res.redirect("/");
     //here we will add a video to the videos array.
+}
+
+export const deleteStory = async (req, res) => {
+    const { id } = req.params;
+    console.log(id);
+    return res.redirect("/");
+}
+
+export const searchStory = async (req, res) => {
+    const { keyword } = req.query
+    console.log(keyword);
+    return res.render("search", { pageTitle: "Search Page", storyDatas })
 }
