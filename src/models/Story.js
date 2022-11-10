@@ -5,7 +5,7 @@ const storySchema = new mongoose.Schema({
     title: String,
     description: String,
     creationAt: Date,
-    hashtag: [{ type: String }],
+    hashtags: [{ type: String }],
     meta: {
         views: Number,
         rating: Number,
