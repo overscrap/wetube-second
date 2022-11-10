@@ -1,13 +1,17 @@
 import Story from "../models/Story";
+/* 
+ * Story.find({}, (error, stories) => {
+     }
+    ); 
+*/
 
-
-export const home = (req, res) => {
-    console.log("Start");
-    Story.find({}, (error, stories) => {
-        console.log("Finished");
+export const home = async (req, res) => {
+    try {
+        const story = await Story.find({});
         return res.render("home", { pageTitle: "Home", storyDatas: []});
-    });
-    console.log("I finish first");
+    } catch (error) {
+        return res.render("server-error");
+    }
 }
 
 export const show = (req, res) => {
