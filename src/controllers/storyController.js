@@ -2,8 +2,12 @@ import Story from "../models/Story";
 
 
 export const home = (req, res) => {
-    Story.find({}, (error, stories) =>{});
-    return res.render("home", { pageTitle: "Home"});
+    console.log("Start");
+    Story.find({}, (error, stories) => {
+        console.log("Finished");
+        return res.render("home", { pageTitle: "Home", storyDatas: []});
+    });
+    console.log("I finish first");
 }
 
 export const show = (req, res) => {
