@@ -2,14 +2,13 @@ import mongoose from "mongoose";
 
 //형식을 정해준다.
 const storySchema = new mongoose.Schema({
-    title: String,
-    description: String,
-    creationAt: Date,
-    hashtags: [{ type: String }],
+    title: { type: String, required: true, trim: true},
+    description: { type: String, required: true, trim: true},
+    createdAt: { type: Date, default: Date.now, required: true},
+    hashtags: [{ type: String, trim: true }],
     meta: {
-        views: Number,
-        rating: Number,
-
+        views: {type: Number, default:0, required: true},
+        rating: {type: Number, default:0, required: true},
     }
 });
 

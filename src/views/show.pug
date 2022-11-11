@@ -1,7 +1,9 @@
 extends partials/layout
 
 block content
-    h4 #{story.views} #{story.views === 1 ? "view" : "views"}
+    div 
+        p=story.description 
+        small=story.createdAt
     br
     a(href=`${story.id}/edit`) Edit Story &rarr;
     br

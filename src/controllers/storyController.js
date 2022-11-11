@@ -1,22 +1,19 @@
 import Story from "../models/Story";
-/* 
- * Story.find({}, (error, stories) => {
-     }
-    ); 
-*/
 
 export const home = async (req, res) => {
     try {
         const storyDatas = await Story.find({});
+        console.log(storyDatas);
         return res.render("home", { pageTitle: "Home", storyDatas});
     } catch (error) {
         return res.render("server-error");
     }
 }
 
-export const show = (req, res) => {
+export const show = async(req, res) => {
     const { id } = req.params;
-    return res.render("show", { pageTitle: `Show`});
+    const story = await Story.findById({_id: id})
+    return res.render("show", { pageTitle: `${story.title}`, story});
 }
 export const getEdit = (req, res) => {
     const { id } = req.params;
@@ -32,21 +29,19 @@ export const getUpload = (req, res) => {
     return res.render("upload", { pageTitle: "Upload Story" });
 }
 
-export const postUpload = (req, res) => {
+export const postUpload = async(req, res) => {
     const { title, description, hashtags } = req.body;
-    console.log(title, description, hashtags);
-    
-    const story = new Story({
-        title,
-        description,
-        createAt: Date.now(),
-        hashtags: hashtags.split(",").map((word) => `#${word}`),
-        meta: {
-            views: 0,
-            rating: 0,
-        }
-    });
-    console.log(story);
+    try {
+        await Story.create({
+            title,
+            description,
+            hashtags: hashtags.split(",").map((word) => `#${word}`),
+        });
+    } catch (error) {
+        console.log(error);
+        return res.render("upload", { pageTitle: "Upload Story", errorMessage:error._message });
+    }
+
     return res.redirect("/");
 }
 

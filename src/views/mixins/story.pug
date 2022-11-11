@@ -1,9 +1,7 @@
 mixin story(param)
     div
         h4
-            a(href=`/stories/${param.id}`) #{param.title}
-        ul 
-            li #{param.rating}/5.
-            li #{param.comments} comments 
-            li Posted #{param.createAt}
-            li #{param.views} views.
+            a(href=`/stories/${param._id}`) #{param.title}
+        p=param.description
+        small=param.createdAt
+        hr
