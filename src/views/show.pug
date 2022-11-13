@@ -2,7 +2,10 @@ extends partials/layout
 
 block content
     div 
-        p=story.description 
+        p=story.description
+        ul
+            each hashtag in story.hashtags
+                li=hashtag
         small=story.createdAt
     br
     a(href=`${story.id}/edit`) Edit Story &rarr;

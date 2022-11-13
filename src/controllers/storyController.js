@@ -2,26 +2,45 @@ import Story from "../models/Story";
 
 export const home = async (req, res) => {
     try {
-        const storyDatas = await Story.find({});
-        console.log(storyDatas);
-        return res.render("home", { pageTitle: "Home", storyDatas});
+        const storyDatas = await Story.find({}).sort({ createdAt: "desc" });
+        return res.render("home", { pageTitle: "Home", storyDatas });
     } catch (error) {
         return res.render("server-error");
     }
 }
 
-export const show = async(req, res) => {
+export const show = async (req, res) => {
     const { id } = req.params;
-    const story = await Story.findById({_id: id})
-    return res.render("show", { pageTitle: `${story.title}`, story});
+    const story = await Story.findById({ _id: id })
+    if (!story) {
+        return res.render("404", { pageTitle: "Story not found." });
+    } else {
+        return res.render("show", { pageTitle: `${story.title}`, story });
+    }
 }
-export const getEdit = (req, res) => {
+export const getEdit = async (req, res) => {
     const { id } = req.params;
-    return res.render("edit", { pageTitle: `Editing` });
+    const story = await Story.findById({ _id: id });
+    if (!story) {
+        return res.render("404", { pageTitle: " Story not found." });
+    }
+    return res.render("edit", { pageTitle: `Editing ${story.title}`, story }); ``
 }
-export const postEdit = (req, res) => {
+export const postEdit = async (req, res) => {
     const { id } = req.params;
-    const { title } = req.body;
+    const { title, description, hashtags } = req.body;
+    const story = await Story.exists({ _id: id });
+
+    if (!story) {
+        return res.render("404", { pageTitle: "Story not found." });
+    }
+
+    await Story.findByIdAndUpdate(id, {
+        title,
+        description,
+        hashtags: Story.formatHashtags(hashtags)
+    });
+
     return res.redirect(`/stories/${id}`);
 }
 
@@ -29,17 +48,17 @@ export const getUpload = (req, res) => {
     return res.render("upload", { pageTitle: "Upload Story" });
 }
 
-export const postUpload = async(req, res) => {
+export const postUpload = async (req, res) => {
     const { title, description, hashtags } = req.body;
     try {
         await Story.create({
             title,
             description,
-            hashtags: hashtags.split(",").map((word) => `#${word}`),
+            hashtags: Story.formatHashtags(hashtags)
         });
     } catch (error) {
         console.log(error);
-        return res.render("upload", { pageTitle: "Upload Story", errorMessage:error._message });
+        return res.render("upload", { pageTitle: "Upload Story", errorMessage: error._message });
     }
 
     return res.redirect("/");
@@ -47,10 +66,24 @@ export const postUpload = async(req, res) => {
 
 export const deleteStory = async (req, res) => {
     const { id } = req.params;
-    return res.redirect("/");
+    try {
+        await Story.findByIdAndDelete(id);
+        return res.redirect("/");
+
+    } catch (error) {
+        return res.render("404", { pageTitle: "Delete Story", errorMessage: error._message });
+    }
 }
 
 export const searchStory = async (req, res) => {
     const { keyword } = req.query
-    return res.render("search", { pageTitle: "Search"})
+    let storyDatas = [];
+    if (keyword) {
+        storyDatas = await Story.find({
+            title: {
+                $regex: new RegExp(keyword, "i")
+            }
+        });
+    }
+    return res.render("search", { pageTitle: "Search", storyDatas });
 }

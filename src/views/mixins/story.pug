@@ -3,5 +3,8 @@ mixin story(param)
         h4
             a(href=`/stories/${param._id}`) #{param.title}
         p=param.description
+        ul
+            each hashtag in param.hashtags
+                li=hashtag
         small=param.createdAt
         hr
