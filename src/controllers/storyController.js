@@ -22,7 +22,7 @@ export const getEdit = async (req, res) => {
     const { id } = req.params;
     const story = await Story.findById({ _id: id });
     if (!story) {
-        return res.render("404", { pageTitle: " Story not found." });
+        return res.status(404).render("404", { pageTitle: " Story not found." });
     }
     return res.render("edit", { pageTitle: `Editing ${story.title}`, story }); ``
 }
@@ -32,7 +32,7 @@ export const postEdit = async (req, res) => {
     const story = await Story.exists({ _id: id });
 
     if (!story) {
-        return res.render("404", { pageTitle: "Story not found." });
+        return res.status(404).render("404", { pageTitle: "Story not found." });
     }
 
     await Story.findByIdAndUpdate(id, {
@@ -57,8 +57,7 @@ export const postUpload = async (req, res) => {
             hashtags: Story.formatHashtags(hashtags)
         });
     } catch (error) {
-        console.log(error);
-        return res.render("upload", { pageTitle: "Upload Story", errorMessage: error._message });
+        return res.status(400).render("upload", { pageTitle: "Upload Story", errorMessage: error._message });
     }
 
     return res.redirect("/");
@@ -71,7 +70,7 @@ export const deleteStory = async (req, res) => {
         return res.redirect("/");
 
     } catch (error) {
-        return res.render("404", { pageTitle: "Delete Story", errorMessage: error._message });
+        return res.status(404).render("404", { pageTitle: "Delete Story", errorMessage: error._message });
     }
 }
 

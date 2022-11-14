@@ -1,4 +1,13 @@
 extends partials/layout
 
-block content 
-    h4=pageTitle
+block content
+    if(errorMessage)
+        span=errorMessage
+    form(method="post")
+        input(type="text", name="userId", required="true", placeholder="UserId")
+        input(type="text", name="password", required="true", placeholder="Password")
+        input(type="submit", value="Login")
+    hr
+    div 
+        span Don't have an account? 
+        a(href="/join") Create one now &rarr;
