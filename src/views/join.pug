@@ -1,0 +1,13 @@
+extends partials/layout
+
+block content
+    if(errorMessage)
+        span=errorMessage
+    form(method="post")
+        input(type="text", name="email", required="true", placeholder="Email")
+        input(type="text", name="userId", required="true", placeholder="UserId")
+        input(type="text", name="password1", required="true", placeholder="Password")
+        input(type="text", name="password2", required="true", placeholder="Confirm Password")
+        input(type="text", name="name", required="true", placeholder="Name")
+        input(type="text", name="location", required="true", placeholder="Location")
+        input(type="submit", value="Join")
