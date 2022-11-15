@@ -7,14 +7,22 @@ html(lang="ko")
             h1=pageTitle
             nav 
                 ul 
-                    li
-                        a(href="/stories/upload") Upload Story
                     li 
                         a(href="/") Home
                     li 
                         a(href="/stories/search") Search
-                    li 
-                        a(href="/join") Join 
+                    if loggedIn
+                        li
+                            a(href="/logout") Logout
+                        li
+                            a(href="/my-profile") #{loggedUser.name}'s profile
+                        li
+                            a(href="/stories/upload") Upload Story
+                    else 
+                        li
+                            a(href="/login") Login
+                        li 
+                            a(href="/join") Join 
         main
             block content
     include footer.pug

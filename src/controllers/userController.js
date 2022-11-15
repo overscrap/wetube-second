@@ -5,10 +5,10 @@ export const getJoin = (req, res) => {
     return res.render("join", { pageTitle: "Join" });
 }
 
-export const postJoin = async(req, res) => {
+export const postJoin = async (req, res) => {
     const { email, userId, password, password2, name, location } = req.body
     const pageTitle = "Join";
-    
+
     const exists = await User.exists({ $or: [{ userId }, { email }] });
     if (exists) {
         return res.status(400).render("join", { pageTitle, errorMessage: "This userId/email is already taken." });
@@ -51,6 +51,10 @@ export const postLogin = async (req, res) => {
             errorMessage: "Wrong password"
         })
     }
+
+    req.session.loggedIn = true;
+    req.session.user = user;
+
     return res.redirect("/");
 }
 
