@@ -50,11 +50,13 @@ export const getUpload = (req, res) => {
 
 export const postUpload = async (req, res) => {
     const { title, description, hashtags } = req.body;
+    const { path: fileUrl } = req.file;
     try {
         await Story.create({
             title,
             description,
-            hashtags: Story.formatHashtags(hashtags)
+            hashtags: Story.formatHashtags(hashtags),
+            fileUrl
         });
     } catch (error) {
         return res.status(400).render("upload", { pageTitle: "Upload Story", errorMessage: error._message });

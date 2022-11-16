@@ -9,7 +9,8 @@ const storySchema = new mongoose.Schema({
     meta: {
         views: { type: Number, default: 0, required: true },
         rating: { type: Number, default: 0, required: true },
-    }
+    },
+    fileUrl: String
 });
 
 storySchema.static("formatHashtags", function (hashtags) {

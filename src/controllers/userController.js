@@ -71,10 +71,31 @@ export const getEditProfile = (req, res) => {
     return res.render("edit-profile", {pageTitle:"Edit profile"});
 }
 
-export const postEditProfiles = (req,res) => {
-    const {body : {title, description, hashtags}, file} = req;
-    console.log(title, description, hashtags);
-    console.log(file);
+export const postEditProfiles = async(req,res) => {
+    const {
+        session: {
+            user:{_id, avataUrl}
+        },
+        body: {
+            name,
+            email,
+            userId,
+            location },
+        file //req.file.path만 사용할 경우 파일을 보내지 않으면 undefined가 됨.
+    } = req;
+
+    const updateUser = await User.findByIdAndUpdate(
+        _id,
+        {
+            avatarUrl: file ? file.path : avataUrl,
+            name,
+            email,
+            userId,
+            location
+        },
+        {new:true}
+    )
+    req.session.user = updateUser;
     return res.redirect(`/users/my-profile`);
 }
 

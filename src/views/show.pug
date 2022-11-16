@@ -1,6 +1,7 @@
 extends partials/layout
 
 block content
+    video(src="/" + story.fileUrl, controls)
     div 
         p=story.description
         ul
