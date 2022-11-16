@@ -58,5 +58,23 @@ export const postLogin = async (req, res) => {
     return res.redirect("/");
 }
 
+export const myProfile = async (req, res) => {
+    if(req.session.loggedIn){
+        const {user} = req.session;
+        const userInfo = await User.findOne({userId : user.userId});
+        return res.render("my-profile", {pageTitle : `${user.name}'s profile`, userInfo});
+    }else{
+        return res.redirect("/");
+    }
+}
+export const getEditProfile = (req, res) => {
+    return res.render("edit-profile", {pageTitle:"Edit profile"});
+}
 
+export const postEditProfiles = (req,res) => {
+    const {body : {title, description, hashtags}, file} = req;
+    console.log(title, description, hashtags);
+    console.log(file);
+    return res.redirect(`/users/my-profile`);
+}
 
