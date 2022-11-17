@@ -1,1 +1,2 @@
-# wetube-second : 반복 복습만이 프로그래밍 정점에 다가갈 수 있다.
+# wetube-second
+# 익숙해질 때까지 복습할 것.
