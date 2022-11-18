@@ -2,13 +2,17 @@ extends partials/layout
 
 block content
     video(src="/" + story.fileUrl, controls)
-    div 
-        p=story.description
-        ul
-            each hashtag in story.hashtags
-                li=hashtag
-        small=story.createdAt
-    br
-    a(href=`${story.id}/edit`) Edit Story &rarr;
-    br
-    a(href=`${story.id}/delete`) Delete Story &rarr;
+    //-
+    //- div 
+    //-     p=story.description
+    //-     ul
+    //-         each hashtag in story.hashtags
+    //-             li=hashtag
+    //-     small=story.createdAt
+    //- br
+    //- a(href=`${story.id}/edit`) Edit Story &rarr;
+    //- br
+    //- a(href=`${story.id}/delete`) Delete Story &rarr;
+
+block scripts 
+    script(src="/static/js/videoPlayer.js")
