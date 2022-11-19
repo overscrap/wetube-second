@@ -2,11 +2,11 @@ extends partials/layout
 include mixins/story
 
 block content 
-    form(action="", method="GET")
+    form(action="", method="GET").search__form
         input(type="text", name="keyword", required, placeholder="Enter Keyword")
         input(type="submit", value="Search Now!")
-
-    each item in storyDatas
-        +story(item)
-    else
-        li Sorry, nothing found.
+    div.story-grid
+        each item in storyDatas
+            +story(item)
+        else
+            span.empty__message No stories found.

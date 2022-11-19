@@ -1,29 +1,13 @@
 doctype html
 html(lang="ko")
     head
-        include header.pug
+        //- link(rel="stylesheet", href="https://unpkg.com/mvp.css@1.12/mvp.css")
+        link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css")
+        link(rel="stylesheet", href="/static/css/styles.css")
+        title #{pageTitle} | #{siteName}
     body
-        header
-            h1=pageTitle
-            nav 
-                ul 
-                    li 
-                        a(href="/") Home
-                    li 
-                        a(href="/stories/search") Search
-                    if loggedIn
-                        li
-                            a(href="/logout") Logout
-                        li
-                            a(href="/users/my-profile") #{loggedInUser.name}'s profile
-                        li
-                            a(href="/stories/upload") Upload Story
-                    else 
-                        li
-                            a(href="/login") Login
-                        li 
-                            a(href="/join") Join 
+        include header.pug
         main
             block content
-    include footer.pug
+        include footer.pug
     block scripts

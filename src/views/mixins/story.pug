@@ -1,10 +1,8 @@
 mixin story(param)
-    div
-        h4
-            a(href=`/stories/${param._id}`) #{param.title}
-        p=param.description
-        ul
-            each hashtag in param.hashtags
-                li=hashtag
-        small=param.createdAt
-        hr
+    a(href=`/stories/${param.id}`).video-mixin
+        div.video-mixin__thumb
+        div.video-mixin__data
+            span.video-mixin__title=param.title
+            div.video-mixin__meta
+                span ownername • 
+                span #{param.meta.views} 회
