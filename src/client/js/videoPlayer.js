@@ -122,6 +122,10 @@ const handleKeyUp = (event) => {
                 video.volume = (Math.floor(video.volume * 10) + 1) / 10;
                 volumeRange.value = (Math.floor(volumeRange.value * 10) + 1) / 10;
             }
+            if(video.muted){
+                video.muted = false;
+                muteBtn.innerText = "Mute"
+            }
         }
     } else if (event.code === "ArrowDown") {
         if(document.activeElement.id != "timeline"){
@@ -129,15 +133,20 @@ const handleKeyUp = (event) => {
                 video.volume = (Math.floor(video.volume * 10) - 1) / 10;
                 volumeRange.value = (Math.floor(volumeRange.value * 10) - 1) / 10;
             }
+
+            if(video.volume == 0){
+                video.muted = true;
+                muteBtn.innerText = "Unmute";
+            }
         }
     }
     if (event.code === "ArrowRight") {
         if(document.activeElement.id != "volumeRange"){
-            video.currentTime = video.currentTime + 10;
+            video.currentTime = video.currentTime + 5;
         }
     } else if (event.code === "ArrowLeft") {
         if(document.activeElement.id != "volumeRange"){
-            video.currentTime = video.currentTime - 10;
+            video.currentTime = video.currentTime - 5;
         }
     }
 };
