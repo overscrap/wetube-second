@@ -4,18 +4,24 @@ const muteBtn = document.getElementById("mute");
 const currenttime = document.getElementById("currenttime");
 const totalTime = document.getElementById("totalTime");
 const volumeRange = document.getElementById("volume");
+const timeline = document.getElementById("timeline");
+const fullScreenBtn = document.getElementById("fullScreenBtn");
+const videoContainer = document.getElementById("videoContainer");
+const videoControls = document.getElementById("videoControls");
 
+let controlsTimeout = null;
+let controlsMovementTimeout = null;
 let volumeTemp = 0.5;
 video.volume = volumeTemp;
 
 const handlePlay = (e) => {
-    handleBtnPlay();
     
     if (video.paused) {
         video.play();
     } else {
         video.pause();
     }
+    playBtn.innerText = video.paused ? "Play" : "Pause";
 }
 
 const handleMute = (e) => {
@@ -43,24 +49,61 @@ const handleVolumeChange = (e) => {
     video.volume = volumeTemp;
 }
 
-const handleBtnPlay = (e) => {
-    playBtn.innerText = video.paused ? "Pause" : "Play";
-}
-
 const formatTime = (second) => {
     return new Date(second * 1000).toISOString().substring(11,19);
 }
 const handleTotalTime = () => {
     totalTime.innerText = formatTime(Math.floor(video.duration));
+    timeline.max = Math.floor(video.duration);
 }
 
 const handleCurrentTime = () => {
     currenttime.innerText = formatTime(Math.ceil(video.currentTime));
+    timeline.value = Math.ceil(video.currentTime);
+}
+
+const handleTimelineChange = (e) => {
+    const { target: { value } } = e;
+    video.currentTime = value;
+}
+
+const handleToggleFullScreen = () => {
+    const fullScreenYn = document.fullscreenElement;
+    if (fullScreenYn) {
+        document.exitFullscreen();
+        fullScreenBtn.innerText = "Enter Full Screen";
+    } else {
+        videoContainer.requestFullscreen();
+        fullScreenBtn.innerText = "Exit Full Screen";
+    }
+}
+
+const hideControls = () => {
+    videoControls.classList.remove("showing");
+}
+
+const handleMouseMove = () => {
+    if (controlsTimeout) {
+        clearTimeout(controlsTimeout);
+        controlsTimeout = null;
+    }
+    if (controlsMovementTimeout) {
+        clearTimeout(controlsMovementTimeout);
+        controlsMovementTimeout = null;
+    }
+    videoControls.classList.add("showing");
+    controlsMovementTimeout = setTimeout(hideControls, 3000);
+}
+const handleMouseLeave = () => {
+    controlsTimeout = setTimeout(hideControls, 3000)
 }
 
 playBtn.addEventListener("click", handlePlay);
 muteBtn.addEventListener("click", handleMute);
 volumeRange.addEventListener("input", handleVolumeChange);
-video.addEventListener("click", handleBtnPlay);
 video.addEventListener("loadedmetadata", handleTotalTime);
 video.addEventListener("timeupdate", handleCurrentTime);
+timeline.addEventListener("input", handleTimelineChange);
+fullScreenBtn.addEventListener("click", handleToggleFullScreen);
+video.addEventListener("mousemove", handleMouseMove);
+video.addEventListener("mouseleave", handleMouseLeave);
