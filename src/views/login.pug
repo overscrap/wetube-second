@@ -7,7 +7,7 @@ block content
         input(type="text", name="userId", required="true", placeholder="UserId")
         input(type="text", name="password", required="true", placeholder="Password")
         input(type="submit", value="Login")
-    hr
-    div 
+        include partials/social-login
+    div.auth-switch
         span Don't have an account? 
         a(href="/join") Create one now &rarr;

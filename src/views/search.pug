@@ -4,8 +4,10 @@ include mixins/story
 block content 
     form(action="", method="GET").search__form
         input(type="text", name="keyword", required, placeholder="Enter Keyword")
-        input(type="submit", value="Search Now!")
-    div.story-grid
+        button
+            i.fas.fa-search
+
+    div.video-grid
         each item in storyDatas
             +story(item)
         else
