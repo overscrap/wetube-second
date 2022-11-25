@@ -1,4 +1,3 @@
-
 import express from "express"
 import morgan from "morgan";
 import session from "express-session";
@@ -21,10 +20,15 @@ app.use(logger);
 app.use(express.urlencoded({ extended: true }));
 //npm express-session
 app.use(session({
-    secret: "Hello!",
-    resave: true,
-    saveUninitialized: true,
-    store: MongoStore.create({mongoUrl:"mongodb://127.0.0.1:27017/wetube"})
+    secret: process.env.COOKIE_SECRET,
+    /*  
+        resave: false,
+        saveUninitialized: false,
+        => 세션을 수정했을때만 세션을 DB에 저장하고 쿠키를 넘겨줌 
+    */
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({mongoUrl:process.env.DB_URL})
 }));
 
 app.use(localsMiddleware);

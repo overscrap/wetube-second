@@ -1,3 +1,4 @@
+import "dotenv/config" //가능한한 가장 빠르게 import해줘야한다.
 import "./db";
 import "./models/Story"
 import "./models/User"
