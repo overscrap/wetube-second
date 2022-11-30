@@ -38,14 +38,14 @@ export const getLogin = (req, res) => {
 export const postLogin = async (req, res) => {
     const pageTitle = "Login";
     const { userId, password } = req.body;
-    const user = await User.findOne({ userId });
+    const user = await User.findOne({ userId, socialOnly: false });
     if (!user) {
         return res.status(400).render("login", {
             pageTitle,
             errorMessage: "An account with this userId does not exist."
         })
     }
-    const passwordChk = await bcrypt.compare(password, user.password);
+    const passwordChk = bcrypt.compare(password, user.password);
     if (!passwordChk) {
         return res.status(400).render("login", {
             pageTitle,
@@ -60,8 +60,7 @@ export const postLogin = async (req, res) => {
 }
 
 export const logout = (req, res) => {
-    req.session.loggedIn = false;
-    req.session.user = null;
+    req.session.destroy();
     return res.redirect("/");
 }
 
@@ -139,14 +138,44 @@ export const finishGithubLogin = async(req, res) => {
 
     if ("access_token" in tokenRequest) {
         const { access_token } = tokenRequest;
-        const userRequest = await (
-            await fetch("https://api.github.com/user", {
+        const apiUrl = "https://api.github.com";
+        const userData = await (
+            await fetch(`${apiUrl}/user`, {
                 headers: {
                     Authorization: `token ${access_token}`,
                 }
             })
         ).json();
-        console.log(userRequest);
+        const emailData = await (
+            await fetch(`${apiUrl}/user/emails`, {
+                headers: {
+                    Authorization: `token ${access_token}`,
+                }
+            })
+        ).json();
+        
+        const emailObj = emailData.find(
+            email => email.primary === true && email.verified === true
+        );
+        if (!emailObj) {
+            // set notification
+            return res.redirect("/login");
+        }
+        let user = await User.findOne({ email: emailObj.email });
+        if (!user) {
+            user = await User.create({
+                userId: userData.login,
+                email: emailObj.email,
+                name: userData.name,
+                password: "",
+                location: userData.location,
+                socialOnly: true,
+                avatarUrl : userData.avatar_url,
+            });
+        }
+        req.session.loggedIn = true;
+        req.session.user = user;
+        return res.redirect("/");
     } else {
         return res.redirect("/login");
     }
