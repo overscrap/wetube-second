@@ -89,7 +89,10 @@ export const postEditProfiles = async(req,res) => {
             location },
         file //req.file.path만 사용할 경우 파일을 보내지 않으면 undefined가 됨.
     } = req;
-
+    const exists = await User.exists({ $or: [{ userId }, { email }] });
+    if (exists) {
+        return res.status(400).render("edit-profile", { pageTitle:"Edit profile", errorMessage: "This userId/email is already taken." });
+    }
     const updateUser = await User.findByIdAndUpdate(
         _id,
         {
