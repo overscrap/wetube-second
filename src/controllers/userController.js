@@ -183,3 +183,11 @@ export const finishGithubLogin = async(req, res) => {
         return res.redirect("/login");
     }
 }
+
+export const getChangePassword = (req, res) => {
+    return res.render("users/change-password", { pageTitle: "Change Password" });
+}
+export const postChangePassword = (req, res) => {
+    // send notification 
+    return res.redirect("/");
+}
