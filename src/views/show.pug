@@ -15,17 +15,21 @@ block content
                 input(type="range", step="1", value=0, min="0")#timeline
             div 
                 button#fullScreenBtn Enter Full Screen
-        //-
-        //- div 
-        //-     p=story.description
-        //-     ul
-        //-         each hashtag in story.hashtags
-        //-             li=hashtag
-        //-     small=story.createdAt
-        //- br
-        //- a(href=`${story.id}/edit`) Edit Story &rarr;
-        //- br
-        //- a(href=`${story.id}/delete`) Delete Story &rarr;
+        div 
+            p=story.description
+            ul
+                each hashtag in story.hashtags
+                    li=hashtag
+            small=story.createdAt
+            br
+            samll Uploaded by 
+                a(href=`/users/${story.owner._id}`)=story.owner.name
+        br
+        if loggedInUser
+            if String(story.owner.id) === String(loggedInUser._id)
+                a(href=`${story.id}/edit`) Edit Story &rarr;
+                br
+                a(href=`${story.id}/delete`) Delete Story &rarr;
 
 block scripts 
     script(src="/static/js/videoPlayer.js")

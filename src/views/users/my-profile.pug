@@ -1,0 +1,11 @@
+extends ../partials/layout
+include ../mixins/story
+block content 
+    h1=pageTitle
+    div.video-grid
+        each story in stories 
+            +story(story)
+        else 
+            span.empty__message No stories found.
+    br
+    a(href=`/users/edit-profile`) Edit Story &rarr;

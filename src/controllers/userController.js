@@ -1,6 +1,7 @@
 import User from "../models/User";
 import fetch from "cross-fetch";
 import bcrypt from "bcrypt";
+import Story from "../models/Story";
 
 export const getJoin = (req, res) => {
     return res.render("join", { pageTitle: "Join" });
@@ -45,7 +46,7 @@ export const postLogin = async (req, res) => {
             errorMessage: "An account with this userId does not exist."
         })
     }
-    const passwordChk = bcrypt.compare(password, user.password);
+    const passwordChk = await bcrypt.compare(password, user.password);
     if (!passwordChk) {
         return res.status(400).render("login", {
             pageTitle,
@@ -66,9 +67,14 @@ export const logout = (req, res) => {
 
 export const myProfile = async (req, res) => {
     if(req.session.loggedIn){
-        const {user} = req.session;
-        const userInfo = await User.findOne({userId : user.userId});
-        return res.render("my-profile", {pageTitle : `${user.name}'s profile`, userInfo});
+        const { id } = req.params;
+        const user = await User.findById(id);
+        if (!user) {
+            return res.status(404).render("404", {pageTitle: "User not found."});
+        }
+        const stories = await Story.find({ owner: user._id });
+        console.log(stories)
+        return res.render("users/my-profile", {pageTitle : `${user.name}'s profile`, user, stories});
     }else{
         return res.redirect("/");
     }
@@ -187,7 +193,31 @@ export const finishGithubLogin = async(req, res) => {
 export const getChangePassword = (req, res) => {
     return res.render("users/change-password", { pageTitle: "Change Password" });
 }
-export const postChangePassword = (req, res) => {
-    // send notification 
-    return res.redirect("/");
+export const postChangePassword = async (req, res) => {
+    const {
+        session: {
+            user: { _id},
+        },
+        body: {
+            oldPassword, newPassword, confirmPassword
+        }
+    } = req;
+    const user = await User.findById(_id);
+    const passwordChk = await bcrypt.compare(oldPassword, user.password);
+    if (!passwordChk) {
+        return res.status(400).render("users/change-password", {
+            pageTitle: "Change Password",
+            errorMessage: "The current password is incorrect",
+        });
+    }
+    if (newPassword !== confirmPassword) {
+        return res.status(400).render("users/change-password", {
+            pageTitle: "Change Password",
+            errorMessage: "The password does not match the confirmation",
+        });
+    }
+    
+    user.password = newPassword;
+    await user.save();
+    return res.redirect("/logout");
 }

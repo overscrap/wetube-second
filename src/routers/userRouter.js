@@ -4,7 +4,7 @@ import { avatarUploadFiles, protectorMiddleware, publicOnlyMiddleware } from "..
 
 const userRouter = express.Router();
 
-userRouter.get("/my-profile",myProfile);
+userRouter.get("/:id([0-9a-f]{24})", myProfile);
 userRouter.route("/edit-profile").all(protectorMiddleware).get(getEditProfile).post(avatarUploadFiles.single("avatar"), postEditProfiles);
 userRouter.get("/github/start", publicOnlyMiddleware, startGithubLogin);
 userRouter.get("/github/finish", publicOnlyMiddleware, finishGithubLogin);

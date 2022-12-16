@@ -9,7 +9,7 @@ header
                 li
                     a(href="/logout") Logout
                 li
-                    a(href="/users/my-profile") #{loggedInUser.name}'s profile
+                    a(href=`/users/${loggedInUser._id}`) #{loggedInUser.name}'s profile
                 li
                     a(href="/stories/upload") Upload Story
             else 

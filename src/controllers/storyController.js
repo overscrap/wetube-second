@@ -1,4 +1,5 @@
 import Story from "../models/Story";
+import User from "../models/User";
 
 export const home = async (req, res) => {
     try {
@@ -11,7 +12,8 @@ export const home = async (req, res) => {
 
 export const show = async (req, res) => {
     const { id } = req.params;
-    const story = await Story.findById({ _id: id })
+    const story = await Story.findById(id).populate("owner");
+    console.log(story);
     if (!story) {
         return res.render("404", { pageTitle: "Story not found." });
     } else {
@@ -49,6 +51,7 @@ export const getUpload = (req, res) => {
 }
 
 export const postUpload = async (req, res) => {
+    const { user: { _id } } = req.session;
     const { title, description, hashtags } = req.body;
     const { path: fileUrl } = req.file;
     try {
@@ -56,6 +59,7 @@ export const postUpload = async (req, res) => {
             title,
             description,
             hashtags: Story.formatHashtags(hashtags),
+            owner: _id,
             fileUrl
         });
     } catch (error) {
